@@ -33,7 +33,8 @@ class ScraperManager:
             response = requests.post(config.SCRAPER_SYNC_URL / 'share/sync/',
                                      json={'sync_list': data[_:_ + api_data_bind_border]})
             if response.status_code == 200:
-                time.sleep(5)
+                print(f'Scraping data sync to server {_ + api_data_bind_border}of{len(data)}')
+                time.sleep(1)
                 logger.debug(f'Send to data part({counter})')
             else:
                 logger.error(f'Error send to data part({counter})')

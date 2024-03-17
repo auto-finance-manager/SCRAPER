@@ -14,7 +14,6 @@ class Price:
     """
     CUSTOM INT OBJ FOR DATA SOURCE
     """
-
     def __init__(self, obj):
         self.obj = obj
 
@@ -67,8 +66,7 @@ class Scraper(object):
                     'last_update': stock_pyload[6].text.strip(),
                 }
         except Exception as exception:
-            print(stock_pyload)
-            print(exception)
+            ... # log
 
     def scraper(self):
         if response := requests.get(self.target):

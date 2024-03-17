@@ -9,7 +9,7 @@ import config
 
 class NewsScraper:
     def work(self):
-        if response := requests.get("https://borsa.doviz.com/halka-arz"):
+        if response := requests.get(config.FINANCE_DATA_SOURCE_URL / "halka-arz"):
             pyload = BeautifulSoup(response.content, 'html.parser')
             table = pyload.find('div', {"class": 'sidebar'}).find_all('div')
             news: list = []
