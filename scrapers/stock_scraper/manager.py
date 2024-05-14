@@ -1,5 +1,6 @@
 import time
-
+import pytz
+from datetime import datetime
 from scrapers.stock_scraper import Scraper
 import requests
 import config
@@ -19,9 +20,18 @@ class ScraperManager:
     @staticmethod
     def get_work_times():
         work_times = []
-        for hour in range(8, 18+1):
+        # product_time_zone = pytz.timezone('Europe/Istanbul')  # BIST
+        # product_time = datetime.now(product_time_zone)
+        server_time_zone = pytz.timezone('utc')
+        # server_time = datetime.now(server_time_zone)
+        for hour in range(8, 18 + 1):
             for minute in range(0, 60, 10):
-                work_times.append(f"{hour-3:02}:{minute:02}")
+                product_time = datetime(year=2000, day=1, month=1, hour=hour, minute=minute)
+                product_time = product_time.astimezone(server_time_zone)
+                product_time_hour = product_time.hour
+                product_time_minute = product_time.minute
+                work_times.append(f"{product_time_hour:02}:{product_time_minute:02}")
+        print(work_times)
         return work_times
 
     @staticmethod
@@ -33,11 +43,11 @@ class ScraperManager:
             response = requests.post(config.SCRAPER_SYNC_URL / 'share/sync/',
                                      json={'sync_list': data[_:_ + api_data_bind_border]})
             if response.status_code == 200:
-                print(f'Scraping data sync to server {_ + api_data_bind_border}of{len(data)}')
                 time.sleep(1)
                 logger.debug(f'Send to data part({counter})')
             else:
                 logger.error(f'Error send to data part({counter})')
+        # sen end signal
 
     def data_to_json(self) -> list:
         try:
@@ -66,4 +76,5 @@ class ScraperManager:
 if __name__ == '__main__':
     scraper: ScraperManager = ScraperManager()
     scraper.get_work_times()
+    scraper.work()
 

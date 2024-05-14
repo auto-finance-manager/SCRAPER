@@ -9,6 +9,7 @@ borsanın aktiaf olduğu gün ve saatlerde aktif veri kazıma görevi
 '''
 
 stock_scraper = ScraperManager()
+# stock_scraper.work()
 
 for schedule_item in stock_scraper.get_work_times():
     schedule.every().monday.at(schedule_item).do(stock_scraper.work)
